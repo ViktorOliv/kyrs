@@ -1,0 +1,30 @@
+<project name="TaskScheduler" basedir="." default="deploy">
+    <property name="tomcat.home" value="C:/path/to/tomcat"/>
+    <property name="webapp.name" value="TaskScheduler"/>
+    <property name="src.dir" value="src/main/java"/>
+    <property name="web.dir" value="src/main/webapp"/>
+    <property name="build.dir" value="build"/>
+    <property name="deploy.dir" value="${tomcat.home}/webapps/${webapp.name}"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${build.dir}/classes"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}/classes"/>
+    </target>
+
+    <target name="copy-resources" depends="compile">
+        <copy todir="${build.dir}/${webapp.name}">
+            <fileset dir="${web.dir}"/>
+        </copy>
+    </target>
+
+    <target name="deploy" depends="copy-resources">
+        <mkdir dir="${deploy.dir}"/>
+        <copy todir="${deploy.dir}">
+            <fileset dir="${build.dir}/${webapp.name}"/>
+        </copy>
+    </target>
+</project>
